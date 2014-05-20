@@ -5,20 +5,31 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 
-var routes = require('./routes/index');
-var users = require('./routes/users');
+var baucis = require('baucis');
 
 var app = express();
+
+var mongoose = require('mongoose')
+mongoose.connect('mongodb://localhost/ccf')
 
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
+
+var Entry = require('./models/entry')
+var Event = require('./models/event')
+var User = require('./models/user')
+
+baucis.rest('Entry');
+baucis.rest('Event');
+baucis.rest('User');
+
+app.use('/api', baucis());
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', routes);
-app.use('/users', users);
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
@@ -45,11 +56,12 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
     res.status(err.status || 500);
-    res.render('error', {
-        message: err.message,
-        error: {}
-    });
+    //res.render('error', {
+    //    message: err.message,
+    //    error: {}
+    //});
+    res.send(err.message
+        )
 });
-
 
 module.exports = app;
