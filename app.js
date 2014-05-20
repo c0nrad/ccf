@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 
+var Company = require('./models/company')
 var Entry = require('./models/entry')
 var Event = require('./models/event')
 var User = require('./models/user')
@@ -29,7 +30,6 @@ baucis.rest('User');
 app.use('/api', baucis());
 
 app.use(express.static(path.join(__dirname, 'public')));
-
 
 /// catch 404 and forwarding to error handler
 app.use(function(req, res, next) {
