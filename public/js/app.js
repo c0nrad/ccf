@@ -4,7 +4,6 @@ app.config(function($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl : 'partials/home.html',
-      //controller  : 'MainController'
     })
 
     .when('/events', {
@@ -24,14 +23,22 @@ app.config(function($routeProvider) {
 
 
     .when('/profile', {
-      templateUrl : 'partials/me.html',
-      controller  : 'MeController'
+      templateUrl : 'partials/profile.html',
+      controller  : 'ProfileController'
     })
 
 });
 
 app.factory('Event', function($resource) {
   return $resource( '/api/events/:_id?sort=-timestamp&populate=companies', {_id: "@_id"}, {'update': { method:'PUT' } });
+})
+
+app.factory('Me', function($resource) {
+  return $resource( '/api/users/537bc06d16fbcf6653627f8f');
+})
+
+app.controller('HeaderController', function(Me, $scope) {
+  $scope.me = Me.get()
 })
 
 app.controller('EventsController', function(Event, $scope) {
@@ -44,4 +51,8 @@ app.controller('EventController', function(Event, $routeParams, $scope) {
 
 app.controller('EventRegisterController', function(Event, $routeParams, $scope) {
   $scope.event = Event.get({_id:$routeParams._id})
+})
+
+app.controller('ProfileController', function(Me, $scope) {
+  $scope.me = Me.get()
 })

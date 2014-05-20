@@ -1,14 +1,19 @@
 <h1> Register </h1>
 
-<h1 ng-bind="event.name"> Event </h1>
+<h3 ng-bind="event.name"> Event </h3>
 
 <p ng-bind="event.description"> Description </p>
 <!-- {{event}} -->
 
+<hr>
+<p> Which companies are you interested in? </p>
 <div ng-repeat="company in event.companies">
   <h3> {{company.name}} </h3>
-  <p> {{company.description}} </p>
-  <img height="250px" width="250px" ng-src="{{company.logo}}"> </img>
+  <input type="checkbox"> </input>
+  <img height="100px" width="100px" ng-src="{{company.logo}}"> </img>
 </div>
 
-<button type="button" class="btn btn-primary"> Register </button>
+<p> Resume </p>
+<input type="file"> </input>
+
+<button type="button" class="btn btn-primary"> Register! </button>

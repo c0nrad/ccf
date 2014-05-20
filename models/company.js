@@ -5,6 +5,7 @@ var CompanySchema = new Schema({
   name: {type: String, required: true, default: "Company Name"},
   description: {type: String, default: "Company Description"},
   admins: [{type: Schema.Types.ObjectId, ref: 'User'}],
+  entries: [{type: Schema.Types.ObjectId, ref: 'Entry'}],
   logo: {type: String, default: ""}
 })
 
