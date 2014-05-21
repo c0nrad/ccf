@@ -3,7 +3,8 @@ var Schema = mongoose.Schema
 
 var EntrySchema = new Schema({
   user: {type: Schema.Types.ObjectId, ref: "User"},
-  company: {type: Schema.Types.ObjectId, ref: "Company"}, 
+  companies: {type: [{type: Schema.Types.ObjectId, ref: "Company"}], default: []},
+  event: {type: Schema.Types.ObjectId, ref: "Event" }, 
   dateCreated: {type: Date, default: Date.now}
 })
 

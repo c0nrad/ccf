@@ -9,11 +9,11 @@
 <p> Which companies are you interested in? </p>
 <div ng-repeat="company in event.companies">
   <h3> {{company.name}} </h3>
-  <input type="checkbox"> </input>
+  <input type="checkbox" ng-model="company.entryValue" ng-true-value="{{company._id}}" ng-false-value="!{{company._id}}" ng-change="companyClick(company.entryValue)"> </input>
   <img height="100px" width="100px" ng-src="{{company.logo}}"> </img>
 </div>
 
 <p> Resume </p>
-<input type="file"> </input>
+<input type="file" ng-model="entry.resume"> </input>
 
-<button type="button" class="btn btn-primary"> Register! </button>
+<button type="button" class="btn btn-primary" ng-click="save()"> Register! </button>

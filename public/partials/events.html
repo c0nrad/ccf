@@ -1,5 +1,7 @@
 <h1> Events </h1>
 
+<button ng-click="newEvent()" class="btn btn-primary"> Create Event </button>
+
 <ul>
   <li ng-repeat="event in events"> 
     <a ng-href="/#/event/{{event._id}}"> {{event.name}} </a>

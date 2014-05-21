@@ -13,6 +13,7 @@
     "body-parser": "*",
     "debug": "*",
     "mongoose": "*",
-    "baucis": "*"
+    "baucis": "*",
+    "jade": "*"
   }
 }

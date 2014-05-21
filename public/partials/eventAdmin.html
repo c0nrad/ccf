@@ -1,0 +1,69 @@
+<h1 ng-bind="event.name"> Event Admin </h1>
+
+<div class="form-group">
+  <label for="nameInput"> Event Name </label>
+  <input type="text" class="form-control" id="nameInput" ng-model="event.name"> </input>
+</div>
+
+<div class="form-group">
+  <label for="descriptionTextarea"> Event Description </label>
+  <textarea type="text" class="form-control" id="descriptionTextarea" ng-model="event.description"> </textarea>
+</div>
+
+<div class="companies"> 
+  <div class="well" ng-repeat="company in companies">
+
+    <div class="row">
+      <div class="col-md-3">
+        <img ng-src="{{company.logo}}" width="250" height="250">
+      </div>
+
+      <div class="col-md-9">
+        <div class="form-group">
+          <label for="companyNameInput"> Company Name </label>
+          <input type="text" class="form-control" id="companyNameInput" ng-model="company.name" ng-blur="company.$update()"> </input>
+        </div>
+
+        <div class="form-group">
+          <label for="companyLogo"> Company Logo </label>
+          <input type="text" class="form-control" id="companyLogo" ng-model="company.logo" ng-blur="company.$update()"> </input>
+        </div>
+
+        <div class="form-group">
+          <label for="companyDescriptionTextarea"> Company Description </label>
+          <textarea type="text" class="form-control" id="companyDescriptionTextarea" ng-model="company.description" ng-blur="company.$update()"> </textarea>
+        </div>
+
+        <button class="btn btn-primary"> Save </button>
+        <button class="btn btn-danger" ng-click="deleteCompany(company)"> Delete </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="well">
+  <div class="row">
+    <div class="col-md-3">
+      <img ng-src="{{newCompany.logo}}" width="250" height="250">
+    </div>
+
+    <div class="col-md-9">
+      <div class="form-group">
+        <label for="newCompanyNameInput"> Company Name </label>
+        <input type="text" class="form-control" id="newCompanyNameInput" ng-model="newCompany.name"> </input>
+      </div>
+
+      <div class="form-group">
+        <label for="newCompanyLogo"> Company Logo </label>
+        <input type="text" class="form-control" id="newCompanyLogo" ng-blur="newCompany.logo = newLogo" ng-model="newLogo"> </input>
+      </div>
+
+      <div class="form-group">
+        <label for="newCompanyDescriptionTextarea"> Company Description </label>
+        <textarea type="text" class="form-control" id="newCompanyDescriptionTextarea" ng-model="newCompany.description"> </textarea>
+      </div>
+    </div>
+
+    <button class="form-control btn btn-primary" ng-click="addCompany()"> Add Company </button>
+  </div>
+</div>

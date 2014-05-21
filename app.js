@@ -12,56 +12,35 @@ var app = express();
 var mongoose = require('mongoose')
 mongoose.connect('mongodb://localhost/ccf')
 
+app.use(express.static(path.join(__dirname, 'public')));
+
 app.use(favicon());
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 
+
 var Company = require('./models/company')
 var Entry = require('./models/entry')
 var Event = require('./models/event')
 var User = require('./models/user')
 
-baucis.rest('Entry');
+var eventController = baucis.rest('Entry');
 baucis.rest('Event');
 baucis.rest('User');
+baucis.rest('Company')
 
 app.use('/api', baucis());
 
-app.use(express.static(path.join(__dirname, 'public')));
 
-/// catch 404 and forwarding to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
+eventController.request(function (request, response, next) {
+  request.baucis.incoming(function (context, callback) {
+    console.log(context.incoming)
+    callback(null, context);
+  });
+  next();
 });
 
-/// error handlers
-
-// development error handler
-// will print stacktrace
-if (app.get('env') === 'development') {
-    app.use(function(err, req, res, next) {
-        res.status(err.status || 500);
-        res.render('error', {
-            message: err.message,
-            error: err
-        });
-    });
-}
-
-// production error handler
-// no stacktraces leaked to user
-app.use(function(err, req, res, next) {
-    res.status(err.status || 500);
-    //res.render('error', {
-    //    message: err.message,
-    //    error: {}
-    //});
-    res.send(err.message
-        )
-});
 
 module.exports = app;
