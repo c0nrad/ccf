@@ -31,6 +31,10 @@ app.config(function($routeProvider) {
       controller  : 'ProfileController'
     })
 
+    .when('/registered', {
+      templateUrl : 'partials/registered.html'
+    })
+
 });
 
 app.factory('Event', function($resource) {
@@ -38,11 +42,11 @@ app.factory('Event', function($resource) {
 })
 
 app.factory('Me', function($resource) {
-  return $resource( '/api/users/537cfe3f8f8b54ebcff18dc8');
+  return $resource( '/api/users/537d4f59fb194f2ae738a66a');
 })
 
 app.factory('Entry', function($resource) {
-  return $resource('/api/entries/:_id', {_id: "@_id"}, {'update': {method: 'PUT'}})
+  return $resource('/api/entries/:_id', {_id: "@_id", populate: 'user companies event'}, {'update': {method: 'PUT'}})
 })
 
 app.factory('Company', function($resource) {
@@ -53,11 +57,12 @@ app.controller('HeaderController', function(Me, $scope) {
   $scope.me = Me.get()
 })
 
-app.controller('EventsController', function(Event, $scope, $location) {
+app.controller('EventsController', function(Event, Me, $scope, $location) {
+  $scope.me = Me.get()
   $scope.events = Event.query()
 
   $scope.newEvent = function() {
-    event = new Event({})
+    event = new Event({admin: $scope.me._id})
     event.$save(function(e) {
       console.log(e)
       $location.url('/event/' + e._id + '/admin')
@@ -65,14 +70,17 @@ app.controller('EventsController', function(Event, $scope, $location) {
   }
 })
 
-app.controller('EventController', function(Event, $routeParams, $scope) {
-  $scope.event = Event.get({_id:$routeParams._id})
+app.controller('EventController', function(Event, Company, $routeParams, $scope) {
+  $scope.event = Event.get({_id:$routeParams._id}, function(e) {
+    $scope.companies = Company.query({conditions: { event: e._id}})
+  })  
 })
 
-app.controller('EventRegisterController', function(Event, Me, Entry, $routeParams, $scope) {
+app.controller('EventRegisterController', function(Event, Me, Entry, Company, $routeParams, $location, $scope) {
   $scope.entry = new Entry()
 
   $scope.event = Event.get({_id:$routeParams._id}, function(e, b) {
+    $scope.companies = Company.query({conditions: { event: e._id}})
     $scope.entry.event = e
   })
 
@@ -96,12 +104,16 @@ app.controller('EventRegisterController', function(Event, Me, Entry, $routeParam
     $scope.entry.event = $scope.event._id 
     $scope.entry.user = $scope.me._id
     $scope.entry.$save()
+
+    $location.url('/registered')
   }
 })
 
-app.controller('EventAdminController', function(Event, Me, Company, $routeParams, $scope) {
+app.controller('EventAdminController', function(Event, Me, Company, Entry, $routeParams, $scope) {
   $scope.event = Event.get({_id:$routeParams._id}, function(e) {
     $scope.companies = Company.query({conditions: { event: e._id}})
+    $scope.event.startTime = new Date()
+    $scope.entries = Entry.query({conditions: {event: e._id}})
   })
 
   $scope.newCompany = new Company()
@@ -121,6 +133,9 @@ app.controller('EventAdminController', function(Event, Me, Company, $routeParams
   }
 })
 
-app.controller('ProfileController', function(Me, $scope) {
-  $scope.me = Me.get()
+app.controller('ProfileController', function(Me, Event, Entry, $scope) {
+  $scope.me = Me.get( function(me) {
+    $scope.events = Event.query({conditions: {admin: me._id}}, function() {}, function() { $scope.events = [] })
+    $scope.entries = Entry.query({conditions: {user: me._id}}, function() {}, function() { $scope.entries = [] })
+  })
 })

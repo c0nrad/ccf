@@ -3,7 +3,10 @@
 <p ng-bind="event.description"> Description </p>
 <!-- {{event}} -->
 
-<div ng-repeat="company in event.companies">
+Starts: <p ng-bind="event.startTime"> </p>
+Ends: <p ng-bind="event.endTime"> </p>
+
+<div ng-repeat="company in companies">
   <h3> {{company.name}} </h3>
   <p> {{company.description}} </p>
   <img height="250px" width="250px" ng-src="{{company.logo}}"> </img>

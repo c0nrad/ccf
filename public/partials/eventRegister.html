@@ -3,17 +3,20 @@
 <h3 ng-bind="event.name"> Event </h3>
 
 <p ng-bind="event.description"> Description </p>
-<!-- {{event}} -->
 
 <hr>
 <p> Which companies are you interested in? </p>
-<div ng-repeat="company in event.companies">
+<div ng-repeat="company in companies">
   <h3> {{company.name}} </h3>
   <input type="checkbox" ng-model="company.entryValue" ng-true-value="{{company._id}}" ng-false-value="!{{company._id}}" ng-change="companyClick(company.entryValue)"> </input>
   <img height="100px" width="100px" ng-src="{{company.logo}}"> </img>
 </div>
 
-<p> Resume </p>
-<input type="file" ng-model="entry.resume"> </input>
+
+<div class="form-group">
+  <label for="resumeInput"> Resume </label>
+  <input type="file" ng-model="entry.resume" class="form-control" id="resumeInput"> </input>
+</div>
+
 
 <button type="button" class="btn btn-primary" ng-click="save()"> Register! </button>

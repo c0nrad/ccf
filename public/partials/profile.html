@@ -2,3 +2,13 @@
 
 {{me.email}}
 {{me.resume}}
+
+<h3 ng-show="events.length"> Events You Own </h3>
+<div ng-repeat="event in events">
+  <a href="/#/event/{{event._id}}/admin"> {{event.name}} </a>
+</div>
+
+<h3 ng-show="entries.length"> Entries </h3>
+<div ng-repeat="entry in entries">
+  <p> {{entry}} </p>
+</div>

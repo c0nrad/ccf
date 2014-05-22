@@ -10,6 +10,16 @@
   <textarea type="text" class="form-control" id="descriptionTextarea" ng-model="event.description"> </textarea>
 </div>
 
+<div class="form-group">
+  <label for="startTime"> Start Time: </label>
+  <input type="dateTimeLocal" class="form-control" id="startTime" ng-model="event.startTime"> </input>
+</div>
+
+<div class="form-group">
+  <label for="endTime"> End Time: </label>
+  <input type="datetime" class="form-control" id="endTime" ng-model="event.endTime"> </input>
+</div>
+
 <div class="companies"> 
   <div class="well" ng-repeat="company in companies">
 
@@ -44,7 +54,7 @@
 <div class="well">
   <div class="row">
     <div class="col-md-3">
-      <img ng-src="{{newCompany.logo}}" width="250" height="250">
+      <img src="{{newCompany.logo}}" width="250" height="250">
     </div>
 
     <div class="col-md-9">
@@ -67,3 +77,17 @@
     <button class="form-control btn btn-primary" ng-click="addCompany()"> Add Company </button>
   </div>
 </div>
+
+<h3> Entries </h3>
+<table class="table table-striped">
+  <tr>
+    <th> Name </th>
+    <th> Email </th>
+    <th ng-repeat="company in companies"> {{company.name}} </th>
+  </tr>
+  <tr ng-repeat="entry in entries">
+    <td> {{entry.user.name}} </td>
+    <td> {{entry.user.email}} </td>
+    <th ng-repeat="company in companies"> Yes </th>
+  </tr>
+</table>
