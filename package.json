@@ -6,7 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
-    "express": "4.1.1", // cuzz baucis is a little whiney baby
+    "express": "4.1.1",
     "static-favicon": "*",
     "morgan": "*",
     "cookie-parser": "*",
@@ -14,6 +14,7 @@
     "debug": "*",
     "mongoose": "*",
     "baucis": "*",
-    "jade": "*"
+    "jade": "*",
+    "rand-token": "*"
   }
 }

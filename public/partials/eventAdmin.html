@@ -83,11 +83,11 @@
   <tr>
     <th> Name </th>
     <th> Email </th>
-    <th ng-repeat="company in companies"> {{company.name}} </th>
+    <th ng-repeat="company in companies"> {{company.name}} </th> 
   </tr>
   <tr ng-repeat="entry in entries">
     <td> {{entry.user.name}} </td>
     <td> {{entry.user.email}} </td>
-    <th ng-repeat="company in companies"> Yes </th>
+    <th ng-repeat="company in companies"> Yes </th> <!-- XXX: THE FUCK IS THIS? -->
   </tr>
 </table>
