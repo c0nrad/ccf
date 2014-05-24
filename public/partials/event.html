@@ -1,15 +1,36 @@
 <h1 ng-bind="event.name"> Event </h1>
 
-<p ng-bind="event.description"> Description </p>
-<!-- {{event}} -->
 
-Starts: <p ng-bind="event.startTime"> </p>
-Ends: <p ng-bind="event.endTime"> </p>
+<div class="row">
+  <div class="col-md-8">
+    <p ng-bind="event.description"> Description </p>
 
-<div ng-repeat="company in companies">
-  <h3> {{company.name}} </h3>
-  <p> {{company.description}} </p>
-  <img height="250px" width="250px" ng-src="{{company.logo}}"> </img>
+  </div>
+
+  <div class="col-md-4">
+    <div class="well"> 
+      <h4> Event Details </h4>
+      <p> Starts: {{event.startTime | date:'fullDate'}} </p>
+      <p> Ends: {{event.endTime | date:'fullDate'}} </p>
+    </div>
+    <a style="margin-top: 10px" type="button" class="btn btn-primary btn-block" href="/#/event/{{event._id}}/register"> Register for Event! </a>
+  </div>
 </div>
 
-<a type="button" class="btn btn-primary" href="/#/event/{{event._id}}/register"> Register for Event!</button>
+
+<h3> Recruiting Companies </h3>
+<hr>
+<div ng-repeat="company in companies">
+  <div class="row">
+    <div class="col-md-4">
+      <img height="300px" width="300px" ng-src="{{company.logo}}"> </img>
+    </div>
+    <div class="col-md-8">
+      <h3> {{company.name}} </h3>
+      <p> {{company.description}} </p>
+    </div>
+  </div>
+</div>
+
+
+<a style="margin-top: 10px" type="button" class="btn btn-primary btn-block" href="/#/event/{{event._id}}/register"> Register for Event! </a>

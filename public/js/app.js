@@ -1,9 +1,10 @@
-var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap'])
+var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload'])
 
 app.config(function($routeProvider) {
   $routeProvider
     .when('/', {
       templateUrl : 'partials/home.html',
+      controller  : 'HomeController'
     })
 
     .when('/events', {
@@ -11,7 +12,7 @@ app.config(function($routeProvider) {
       controller  : 'EventsController'
     })
 
-    .when('/event/:_id/register', {
+    .when('/event/:_id/register/:_entry?', {
       templateUrl : 'partials/eventRegister.html',
       controller  : 'EventRegisterController'
     })
@@ -19,6 +20,11 @@ app.config(function($routeProvider) {
     .when('/event/:_id/admin', {
       templateUrl : 'partials/eventAdmin.html', 
       controller  : 'EventAdminController'
+    })
+
+    .when('/event/:_id/company/:token', {
+      templateUrl : 'partials/companyAdmin.html',
+      controller  : 'CompanyAdminController'
     })
 
     .when('/event/:_id', {
@@ -31,6 +37,7 @@ app.config(function($routeProvider) {
       controller  : 'ProfileController'
     })
 
+
     .when('/registered', {
       templateUrl : 'partials/registered.html'
     })
@@ -42,7 +49,7 @@ app.factory('Event', function($resource) {
 })
 
 app.factory('Me', function($resource) {
-  return $resource( '/api/users/537d4f59fb194f2ae738a66a');
+  return $resource( '/api/users/537d4f59fb194f2ae738a66a', {}, {'update': { method: 'PUT' } });
 })
 
 app.factory('Entry', function($resource) {
@@ -50,16 +57,55 @@ app.factory('Entry', function($resource) {
 })
 
 app.factory('Company', function($resource) {
-  return $resource('/api/companies/:_id', {_id: "@_id"}, {'update': {method: 'PUT'}})
+  return $resource('/api/companies/:_id', {_id: "@_id"}, {'update': {method: 'PUT'}, 'get': {method: 'GET', isArray: true}})
 })
 
 app.controller('HeaderController', function(Me, $scope) {
   $scope.me = Me.get()
 })
 
-app.controller('EventsController', function(Event, Me, $scope, $location) {
+app.controller('HomeController', function(Event, Company, $scope) {
+  $scope.events = Event.query(function(events) {
+    $scope.futureEvents = []
+    $scope.currentEvents = []
+    $scope.pastEvents = []
+
+    var curTime = new Date()
+    for (var i = 0; i < events.length; ++i) {
+      e = events[i]
+      e.companies = Company.query({conditions: {event: e._id}}) 
+      if (curTime > e.endTime) {
+        $scope.pastEvents.push(e)
+      } else if (curTime < e.startTime) {
+        $scope.futureEvents.push(e)
+      } else {
+        $scope.currentEvents.push(e)
+      }
+    }
+  })
+})
+
+app.controller('EventsController', function(Event, Me, Company, $scope, $location) {
   $scope.me = Me.get()
-  $scope.events = Event.query()
+
+  $scope.events = Event.query(function(events) {
+    $scope.futureEvents = []
+    $scope.currentEvents = []
+    $scope.pastEvents = []
+
+    var curTime = new Date()
+    for (var i = 0; i < events.length; ++i) {
+      e = events[i]
+      e.companies = Company.query({conditions: {event: e._id}}) 
+      if (curTime > e.endTime) {
+        $scope.pastEvents.push(e)
+      } else if (curTime < e.startTime) {
+        $scope.futureEvents.push(e)
+      } else {
+        $scope.currentEvents.push(e)
+      }
+    }
+  })
 
   $scope.newEvent = function() {
     event = new Event({admin: $scope.me._id})
@@ -76,21 +122,48 @@ app.controller('EventController', function(Event, Company, $routeParams, $scope)
   })  
 })
 
-app.controller('EventRegisterController', function(Event, Me, Entry, Company, $routeParams, $location, $scope) {
-  $scope.entry = new Entry()
+app.controller('EventRegisterController', function(Event, Me, Entry, Company, $routeParams, $upload, $location, $scope) {
+  
+  if ($routeParams._entry) {
+    $scope.entry = Entry.get({_id: $routeParams._entry, populate: ""})
+    $scope.event = Event.get({_id:$routeParams._id}, function(e, b) {
+      $scope.companies = Company.query({conditions: { event: e._id}})
+    })
+    $scope.me = Me.get()
 
-  $scope.event = Event.get({_id:$routeParams._id}, function(e, b) {
-    $scope.companies = Company.query({conditions: { event: e._id}})
-    $scope.entry.event = e
-  })
+    $scope.save = function() {
+      $scope.entry.event = $scope.event._id 
+      $scope.entry.user = $scope.me._id
+      $scope.entry.$update()
+      $location.url('/updated')
+    }
+  } else  {
+    $scope.entry = new Entry()
 
-  $scope.me = Me.get(function(me, b) {
-    $scope.entry.user = me
-  })
+    $scope.event = Event.get({_id:$routeParams._id}, function(e, b) {
+      $scope.companies = Company.query({conditions: { event: e._id}})
+      $scope.entry.event = e
+    })
+
+    $scope.me = Me.get(function(me, b) {
+      $scope.entry.user = me
+      $scope.entry.resume = me.resume
+    })
+
+    $scope.save = function() {
+      $scope.entry.event = $scope.event._id 
+      $scope.entry.user = $scope.me._id
+      $scope.entry.$save()
+
+      $location.url('/registered')
+    }
+  }
 
   $scope.companyClick = function(id) {
     if (id[0] == '!') {
-      $scope.entry.companies.splice(id)
+      id = id.slice(1)
+      index = $scope.entry.companies.indexOf(id)
+      $scope.entry.companies.splice(index, 1)
     } else {
       if ($scope.entry.companies == undefined) {
         $scope.entry.companies = [id]
@@ -100,19 +173,32 @@ app.controller('EventRegisterController', function(Event, Me, Entry, Company, $r
     }
   }
 
-  $scope.save = function() {
-    $scope.entry.event = $scope.event._id 
-    $scope.entry.user = $scope.me._id
-    $scope.entry.$save()
-
-    $location.url('/registered')
+  $scope.isChecked = function(id) {
+    console.log("WHATS my ID", id) 
+    for (var i = 0; i < $scope.entry.companies.length; ++i) {
+      if (id == $scope.entry.companies[i])
+        return true
+    }
+    return false
   }
+
+  $scope.onFileSelect = function($files) {
+    var file = $files[0];
+    $scope.upload = $upload.upload({
+      url: 'upload',
+      method: 'POST',
+      //data: {myObj: $scope.myModelObj},
+      file: file, 
+    }).success(function(data, status, headers, config) {
+      $scope.entry.resume = data
+    });
+  }
+
 })
 
 app.controller('EventAdminController', function(Event, Me, Company, Entry, $routeParams, $scope) {
   $scope.event = Event.get({_id:$routeParams._id}, function(e) {
     $scope.companies = Company.query({conditions: { event: e._id}})
-    $scope.event.startTime = new Date()
     $scope.entries = Entry.query({conditions: {event: e._id}})
   })
 
@@ -120,7 +206,7 @@ app.controller('EventAdminController', function(Event, Me, Company, Entry, $rout
 
   $scope.deleteCompany = function(company) {
     company.$delete()
-    $scope.companies = Company.query({conditions: { event: event._id}})
+    $scope.companies = Company.query({conditions: { event: $scope.event._id}})
   }
 
   $scope.addCompany = function() {
@@ -129,13 +215,36 @@ app.controller('EventAdminController', function(Event, Me, Company, Entry, $rout
     $scope.newCompany = new Company()
     $scope.newLogo = ""
 
-    $scope.companies = Company.query({conditions: { event: event._id}})
+    $scope.companies = Company.query({conditions: { event: $scope.event._id}})
   }
 })
 
-app.controller('ProfileController', function(Me, Event, Entry, $scope) {
+app.controller('CompanyAdminController', function(Event, Company, Entry, $routeParams, $scope) {
+  $scope.company = Company.get( {conditions: {token: $routeParams.token}}, function(company) {
+    $scope.company = company = company[0]
+    $scope.event = Event.get({_id: $routeParams._id})
+    $scope.entries = Entry.query({conditions: {companies: company._id}})
+  })
+})
+
+app.controller('ProfileController', function(Me, Event, Entry, $upload, $scope) {
+  $scope.grades = ["Freshman", "Sophmore", "Junior", "Senior"]
   $scope.me = Me.get( function(me) {
     $scope.events = Event.query({conditions: {admin: me._id}}, function() {}, function() { $scope.events = [] })
     $scope.entries = Entry.query({conditions: {user: me._id}}, function() {}, function() { $scope.entries = [] })
   })
+
+  $scope.onFileSelect = function($files) {
+    var file = $files[0];
+    $scope.upload = $upload.upload({
+      url: 'upload',
+      method: 'POST',
+      //data: {myObj: $scope.myModelObj},
+      file: file, 
+    }).success(function(data, status, headers, config) {
+      $scope.me.resume = data
+      $scope.me.$update()
+      console.log(data);
+    });
+  }
 })

@@ -1,14 +1,40 @@
 <h1 ng-bind="me.name"> Name </h1>
 
-{{me.email}}
-{{me.resume}}
+<div class="row">
+  <div class="col-md-6">
 
-<h3 ng-show="events.length"> Events You Own </h3>
-<div ng-repeat="event in events">
-  <a href="/#/event/{{event._id}}/admin"> {{event.name}} </a>
-</div>
+    {{me.email}}
+    <br /> <br />
 
-<h3 ng-show="entries.length"> Entries </h3>
-<div ng-repeat="entry in entries">
-  <p> {{entry}} </p>
+    <div class="form-group">
+      <label for="userGradeSelect"> Class: </label>
+      <select id="userGradeSelect" class="form-control" ng-model="me.grade" ng-options="grade for grade in grades" ng-change="me.$update()" ng-blur="me.$update()"></select>
+    </div>
+
+    <div class="form-group">
+      <label for="majorInput"> Major: </label>
+      <input id="majorInput" ng-model="me.major" placeholder="Liberal Arts" class="form-control" ng-blur="me.$update()"> </input>
+    </div>
+
+    <div class="form-group">
+      <label for="resumeUpload"> Resume: </label> <br />
+      <a ng-show="me.resume" href="{{me.resume}}"> Current Resume </a>
+      <input class="form-control" type="file" ng-file-select="onFileSelect($files)" >
+    </div>
+
+    <button class="btn btn-primary"> Save </button>
+
+  </div>
+  <div class="col-md-6">
+
+    <h3 ng-show="events.length"> Events You Admin </h3>
+    <div ng-repeat="event in events">
+      <a href="/#/event/{{event._id}}/admin"> {{event.name}} </a>
+    </div>
+
+    <h3 ng-show="entries.length"> Entries </h3>
+    <div ng-repeat="entry in entries">
+      <a href="/#/event/{{entry.event._id}}/register/{{entry._id}}"> {{entry.event.name}} </a>
+    </div>
+  </div>
 </div>

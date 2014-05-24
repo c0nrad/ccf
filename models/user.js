@@ -1,10 +1,14 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
 
+var grades = "Freshman Sophmore Junior Senior".split(' ')
+
 var UserSchema = new Schema({
   name: String,
   email: String, 
   resume: String,
+  major: String,
+  grade: {type: String, enum: grades}
 })
 
 module.exports = mongoose.model('User', UserSchema)

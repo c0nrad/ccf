@@ -1,22 +1,32 @@
-<h1> Register </h1>
-
-<h3 ng-bind="event.name"> Event </h3>
-
-<p ng-bind="event.description"> Description </p>
-
+<h1> Registration for: {{event.name}} </h1>
 <hr>
-<p> Which companies are you interested in? </p>
-<div ng-repeat="company in companies">
-  <h3> {{company.name}} </h3>
-  <input type="checkbox" ng-model="company.entryValue" ng-true-value="{{company._id}}" ng-false-value="!{{company._id}}" ng-change="companyClick(company.entryValue)"> </input>
-  <img height="100px" width="100px" ng-src="{{company.logo}}"> </img>
+
+<div class="row">
+  <div class="col-md-6">
+    <h3> Entry </h3>
+    <p> <strong> Name: </strong> {{me.name}} </p>
+    <p> <strong> Email: </strong> {{me.email}} </p>
+    <p> <strong> Class: </strong> {{me.grade}} </p>
+    <p> <strong> Major: </strong> {{me.major}} </p> 
+
+    <div class="form-group">
+      <label for="resumeInput" ng-show="entry.resume"> Resume </label>
+      <p ng-show="entry.resume"> <a href="{{entry.resume}}"> Current Resume </a> </p>
+      <strong> Upload new resume: </strong> 
+      <input style="display: inline" type="file" ng-model="entry.resume" class="form-control" id="resumeInput" ng-file-select="onFileSelect($files)"> </input>
+    </div>
+  </div>
+
+  <div class="col-md-6">
+    <p> Which companies are you interested in? </p>
+    <div ng-repeat="company in companies" style="padding: 10px; display: inline-block">
+      <h3> {{company.name}} </h3>
+      <input type="checkbox" ng-model="company.entryValue" ng-true-value="{{company._id}}" ng-false-value="!{{company._id}}" ng-change="companyClick(company.entryValue)" ng-checked="isChecked(company._id)"> </input>
+      <img height="100px" width="100px" ng-src="{{company.logo}}"> </img>
+    </div>
+  </div>
 </div>
 
+<button ng-show="entry._id" type="button" class="btn btn-primary btn-block" ng-click="save()"> Update! </button>
 
-<div class="form-group">
-  <label for="resumeInput"> Resume </label>
-  <input type="file" ng-model="entry.resume" class="form-control" id="resumeInput"> </input>
-</div>
-
-
-<button type="button" class="btn btn-primary" ng-click="save()"> Register! </button>
+<button ng-hide="entry._id" type="button" class="btn btn-primary btn-block" ng-click="save()"> Register! </button>

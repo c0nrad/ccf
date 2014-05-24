@@ -1,14 +1,12 @@
 var mongoose = require('mongoose')
 var Schema = mongoose.Schema
-
-// Create a token generator with the default settings:
 var randtoken = require('rand-token');
 
 var CompanySchema = new Schema({
   name: {type: String, required: true, default: "Company Name"},
   description: {type: String, default: "Company Description"},
   logo: {type: String, default: ""},
-  hash: {type: String, default: function() {
+  token: {type: String, default: function() {
     return randtoken.generate(40)
   }},
   event: {type: Schema.Types.ObjectId, ref: 'Event'}

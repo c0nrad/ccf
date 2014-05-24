@@ -5,7 +5,8 @@ var EntrySchema = new Schema({
   user: {type: Schema.Types.ObjectId, ref: "User"},
   companies: {type: [{type: Schema.Types.ObjectId, ref: "Company"}], default: []},
   event: {type: Schema.Types.ObjectId, ref: "Event" }, 
-  dateCreated: {type: Date, default: Date.now}
+  dateCreated: {type: Date, default: Date.now},
+  resume: {type: String, default: ""}
 })
 
 module.exports = mongoose.model('Entry', EntrySchema)

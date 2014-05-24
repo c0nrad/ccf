@@ -15,6 +15,7 @@
     "mongoose": "*",
     "baucis": "*",
     "jade": "*",
-    "rand-token": "*"
+    "rand-token": "*",
+    "multer": "*"
   }
 }

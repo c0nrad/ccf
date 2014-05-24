@@ -2,9 +2,22 @@
 
 <button ng-click="newEvent()" class="btn btn-primary"> Create Event </button>
 
-<ul>
-  <li ng-repeat="event in events"> 
-    <a ng-href="/#/event/{{event._id}}"> {{event.name}} </a>
-  </li>
-</ul>
-{{events}}
+<h2> Current Events </h2>
+<div class="well" ng-repeat="event in currentEvents">  
+  <a href="/#/event/{{event._id}}"> <h3> {{event.name}} </h3> </a>
+  <div style="display:inline-block" ng-repeat="company in event.companies"> <img width="100px" height="100px" ng-src="{{company.logo}}"> </img> </div>
+</div>
+
+<h2> Upcoming Events </h2>
+<div class="well" ng-repeat="event in futureEvents">  
+  <a href="/#/event/{{event._id}}"> <h3> {{event.name}} </h3> </a>
+  <div style="display:inline-block" ng-repeat="company in event.companies"> <img width="100px" height="100px" ng-src="{{company.logo}}"> </img> </div>
+</div>
+
+<h2> Past Events </h2>
+<div class="well" ng-repeat="event in pastEvents">  
+  <a href="/#/event/{{event._id}}"> <h3> {{event.name}} </h3> </a>
+  <div style="display:inline-block" ng-repeat="company in event.companies"> <img width="100px" height="100px" ng-src="{{company.logo}}"> </img> </div>
+</div>
+
+<!-- {{events}} -->
