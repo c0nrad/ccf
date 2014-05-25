@@ -1,1 +1,51 @@
-<h1> Cyber Career Fair </h1>
+
+<style>
+  .step {
+    display: inline-block;
+    width: 100%;
+    height: 250px;
+  }
+
+  .stepTitle {
+    font-size: 18px;
+  }
+
+  .stepDesc {
+    font-size: 18px;
+  }
+</style>
+
+<br> 
+<div class="jumbotron">
+  <h1>Cyber Career Fair</h1>
+  <p> A new way to host career fairs. </p>
+  <p><a class="btn btn-primary btn-lg" role="button">Get Started</a></p>
+</div>
+
+<div ng-init="steps = [ 
+  { icon: 'list-alt', desc: 'Prepare a resume!', long: 'Time to polish off that resume, and don\'t be too modest! Make sure the resume is only one page and shows the very best of you. Things to include: Contact Info, Major, GPA, Previous Experience, Awards/Scholarships, Related Hobbies/Clubs/Activities, anything else you\'d like to see if you were an employeer looking for new workers.' }, 
+  { icon: 'cog', desc: 'Sign up using your @mtu email', long:'Create an account using your @mtu account. The site uses OAuth, so if you\'re already logged on to your MTU email, it shoud only be two clicks to register you. Once registered fill out your profile with the basic information.'}, 
+  { icon: 'ok', desc: 'Register for events', long: 'On the events page, there\'s a listing of all events going on. Pick the ones that are most interesting or related to you. Each event has a list of companies, pick the companies you are most interested in. You can either use your default resume, or upload a new resume for this specific event.'}, 
+  {icon: 'search', desc: '???', long: 'Wait patiently while the companies review your profile. If you are a good fit they\'ll give you a call to setup a Skype Interview. During this time you can update your entry from the Profile page, or you can register for new events.' }, 
+  {icon: 'usd',desc: 'PROFIT!!!', long: 'Now go out an make money! Feel free to send extra money to sclarsen@mtu.edu'}
+]">
+
+<div class="steps">
+  <div class="step" ng-repeat="step in steps">
+    <div class="row">
+      
+      <div class="col-md-3 col-md-offset-1">
+        <div class="stepTitle"> Step {{$index + 1}} </div>
+        <span style="font-size: 128px" class="glyphicon glyphicon-{{step.icon}}"></span>
+      </div>
+
+      <div class="col-md-7 col-md-offset-1">
+        <p class="stepDesc"> <strong> {{step.desc}} </strong> </p>
+        <p class="stepLong"> {{step.long}} </p>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<a href="http://i1.kym-cdn.com/photos/images/newsfeed/000/552/700/390.jpg"> Instructions Unclear? </a>

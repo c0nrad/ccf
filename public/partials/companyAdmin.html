@@ -1,20 +1,19 @@
-<h1> {{company.name}} Admin Page </h1>
+<h1> {{company.name}}: {{event.name}} </h1>
+<h2> </h2>
 
 <div class="alert alert-danger"> <strong> Warning! </strong> This page has private user records. Do not share this URL with unauthorized people. </div>
 
-<h3> {{event.name}} </h3>
+<div class="form-group">
+  <label for="searchInput"> Search: </label>
+  <input class="form-control" ng-model="search.$"> <br>
+</label>
 
 <table class="table table-striped table-boreder">
-  <tr>
-    <th> Name </th>
-    <th> Email </th>
-    <th> Class </th>
-    <th> Major </th>
-    <th> Time </th>
-    <th> Resume </th>
+  <tr ng-init="headers = ['Name', 'Email', 'Class', 'Major', 'Time', 'Resume']">
+    <th ng-repeat="header in headers"> {{header}} </th>
   </tr>
 
-  <tr ng-repeat="entry in entries"> 
+  <tr ng-repeat="entry in entries | filter:search"> 
     <td> {{entry.user.name}} </td>
     <td> {{entry.user.email}} </td>
     <td> {{entry.user.grade}} </td>

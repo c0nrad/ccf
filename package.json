@@ -16,6 +16,7 @@
     "baucis": "*",
     "jade": "*",
     "rand-token": "*",
-    "multer": "*"
+    "multer": "*",
+    "passport": "*"
   }
 }
