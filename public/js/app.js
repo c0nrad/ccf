@@ -58,8 +58,12 @@ app.factory('Company', function($resource) {
   return $resource('/api/companies/:_id', {_id: "@_id"}, {'update': {method: 'PUT'}, 'get': {method: 'GET', isArray: true}})
 })
 
-app.controller('HeaderController', function(Me, $scope) {
+app.controller('HeaderController', function(Me, $scope, $location) {
   $scope.me = Me.get()
+
+  $scope.isActive = function (viewLocation) { 
+        return viewLocation === $location.path();
+  };
 })
 
 app.controller('HomeController', function(Event, Company, $scope) {
@@ -210,7 +214,6 @@ app.controller('EventAdminController', function(Event, Me, Company, Entry, $rout
     $scope.newCompany.event = $scope.event._id;
     $scope.newCompany.$save()
     $scope.newCompany = new Company()
-    $scope.newLogo = ""
 
     $scope.companies = Company.query({conditions: { event: $scope.event._id}})
   }
@@ -236,7 +239,6 @@ app.controller('ProfileController', function(Me, Event, Entry, $upload, $scope) 
     $scope.upload = $upload.upload({
       url: 'upload',
       method: 'POST',
-      //data: {myObj: $scope.myModelObj},
       file: file, 
     }).success(function(data, status, headers, config) {
       $scope.me.resume = data

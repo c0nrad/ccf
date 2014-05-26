@@ -17,7 +17,6 @@ console.info({
 function init(app) {
   
   app.get('/me', function(req, res) {
-    console.log(req.user)
     if (req.user)
       return res.json(req.user)
 

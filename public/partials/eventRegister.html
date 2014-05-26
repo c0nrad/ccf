@@ -13,7 +13,8 @@
       <label for="resumeInput" ng-show="entry.resume"> Resume </label>
       <p ng-show="entry.resume"> <a href="{{entry.resume}}"> Current Resume </a> </p>
       <strong> Upload new resume: </strong> 
-      <input style="display: inline" type="file" ng-model="entry.resume" class="form-control" id="resumeInput" ng-file-select="onFileSelect($files)"> </input>
+      <input style="display: inline" type="file" ng-model="entry.resume" class="form-control" id="resumeInput" ng-file-select="onFileSelect($files)" required> </input>
+      <p ng-show="!entry.resume" style="color: red"> You need a resume! </p>
     </div>
   </div>
 
