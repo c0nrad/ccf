@@ -37,11 +37,9 @@ app.config(function($routeProvider) {
       controller  : 'ProfileController'
     })
 
-
     .when('/registered', {
       templateUrl : 'partials/registered.html'
     })
-
 });
 
 app.factory('Event', function($resource) {
@@ -49,7 +47,7 @@ app.factory('Event', function($resource) {
 })
 
 app.factory('Me', function($resource) {
-  return $resource( '/api/users/537d4f59fb194f2ae738a66a', {}, {'update': { method: 'PUT' } });
+  return $resource( '/api/users/:_id', {_id: "@_id"}, {'update': { method: 'PUT' }, 'get': {method: 'GET', url: '/me'} });
 })
 
 app.factory('Entry', function($resource) {
@@ -187,7 +185,6 @@ app.controller('EventRegisterController', function(Event, Me, Entry, Company, $r
     $scope.upload = $upload.upload({
       url: 'upload',
       method: 'POST',
-      //data: {myObj: $scope.myModelObj},
       file: file, 
     }).success(function(data, status, headers, config) {
       $scope.entry.resume = data

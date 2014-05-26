@@ -17,6 +17,8 @@
     "jade": "*",
     "rand-token": "*",
     "multer": "*",
-    "passport": "*"
+    "passport": "*",
+    "passport-google": "*",
+    "express-session": "*"
   }
 }

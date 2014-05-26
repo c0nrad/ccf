@@ -8,7 +8,8 @@ var UserSchema = new Schema({
   email: String, 
   resume: String,
   major: String,
-  grade: {type: String, enum: grades}
+  grade: {type: String, enum: grades},
+  firstLogin: {type: Date}
 })
 
 module.exports = mongoose.model('User', UserSchema)
