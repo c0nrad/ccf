@@ -66,25 +66,8 @@ app.controller('HeaderController', function(Me, $scope, $location) {
   };
 })
 
-app.controller('HomeController', function(Event, Company, $scope) {
-  $scope.events = Event.query(function(events) {
-    $scope.futureEvents = []
-    $scope.currentEvents = []
-    $scope.pastEvents = []
-
-    var curTime = new Date()
-    for (var i = 0; i < events.length; ++i) {
-      e = events[i]
-      e.companies = Company.query({conditions: {event: e._id}}) 
-      if (curTime > e.endTime) {
-        $scope.pastEvents.push(e)
-      } else if (curTime < e.startTime) {
-        $scope.futureEvents.push(e)
-      } else {
-        $scope.currentEvents.push(e)
-      }
-    }
-  })
+app.controller('HomeController', function(Me, $scope) {
+  $scope.me = Me.get()
 })
 
 app.controller('EventsController', function(Event, Me, Company, $scope, $location) {
