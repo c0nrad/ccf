@@ -57,7 +57,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li ng-show="!me.email">
               <div style="padding-top: 10px; padding-right: 15px"> 
-                <google-plus-signin data-scope="email profile" clientid="552885779455-vap433nf52071m1onc6bknnilvl77vgd.apps.googleusercontent.com"> </google-plus-signin>
+                <google-plus-signin data-scope="email profile" clientid="552885779455-vap433nf52071m1onc6bknnilvl77vgd.apps.googleusercontent.com" data-requestvisibleactions=""> </google-plus-signin>
 
               </div>
             </li>
@@ -88,12 +88,6 @@
 
     <script src="/js/app.js"> </script>
 
-    <script type="text/javascript">
-      (function() {
-        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-        po.src = 'https://apis.google.com/js/client:plusone.js';
-        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-      })();
-    </script>
+   
   </body>
 </html>
