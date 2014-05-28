@@ -39,6 +39,15 @@ Authentication is done through passport.js. Currently using google openID Sign-i
 
 Loads the static handler, and the routes, and thats it.
 
+###secrets.js
+
+You have to define your own, template
+  exports.hostname = "localhost"
+  exports.port = "3000"
+
+  exports.GOOGLE_PLUS_CLIENT_ID = "xxxx"
+  exports.GOOGLE_PLUS_CLIENT_SECRET="xxxx"
+
 ## Contact
 
 sclarsen@mtu.edu
