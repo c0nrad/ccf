@@ -177,6 +177,9 @@ app.controller('EventRegisterController', function(Event, Me, Entry, Company, $r
 
   $scope.isChecked = function(id) {
     console.log("WHATS my ID", id) 
+    if ($scope.entry == undefined || $scope.entry.companies == undefined) {
+      return false
+    }
     for (var i = 0; i < $scope.entry.companies.length; ++i) {
       if (id == $scope.entry.companies[i])
         return true
@@ -223,7 +226,7 @@ app.controller('CompanyAdminController', function(Event, Company, Entry, $routeP
   $scope.company = Company.get( {conditions: {token: $routeParams.token}}, function(company) {
     $scope.company = company = company[0]
     $scope.event = Event.get({_id: $routeParams._id})
-    $scope.entries = Entry.query({conditions: {companies: company._id}})
+    $scope.entries = Entry.query({conditions: {companies: company._id}, token: company.token})
   })
 })
 

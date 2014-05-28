@@ -24,40 +24,16 @@ app.use(bodyParser.urlencoded());
 app.use(multer({ dest: './uploads/'}))
 app.use(cookieParser("i4ms0s0s0s01337 jab00ty"));
 app.use(session())
-
 app.use(passport.initialize());
 app.use(passport.session());
 
 var UserRoutes = require('./routes/user')
 UserRoutes.init(app)
 
-var Company = require('./models/company')
-var Entry = require('./models/entry')
-var Event = require('./models/event')
-var User = require('./models/user')
+var ApiRoutes = require('./routes/api')
+ApiRoutes.init(app)
 
-baucis.rest('Entry');
-baucis.rest('Event');
-baucis.rest('User');
-baucis.rest('Company')
-
-app.use('/api', baucis());
-
-app.post('/upload', function(req, res) {
-  console.log (req.files)
-  fs.readFile(req.files.file.path, function (err, data) {
-    var filename = crypto.createHash('md5').update(req.files.file.path).update(new Date().toISOString()).digest('hex');
-    var newPath = "public/uploads/"+filename;
-    var shortPath = "/uploads/"+filename
-    fs.writeFile(newPath, data, function (err) {
-      if (err) {
-        return winston.error("writingFile", err, newPath)
-      }
-      res.send(shortPath);
-    });
-  });
-})
-
-
+var UploadRoutes = require('./routes/upload')
+UploadRoutes.init(app)
 
 module.exports = app;
