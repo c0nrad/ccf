@@ -37,7 +37,7 @@ Authentication is done through passport.js. Currently using google openID Sign-i
 
 ###App.js
 
-Loads the static handler, and the routes. 
+Loads the static handler, and the routes, and thats it.
 
 ## Contact
 

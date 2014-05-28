@@ -51,7 +51,16 @@
             <li ng-class="{ active: isActive('/')}"><a href="/">Home</a></li>
             <li ng-show="me.email" ng-class="{ active: isActive('/profile')}"><a href="/#/profile">Profile</a></li>
             <li ng-class="{ active: isActive('/events')}"><a href="/#/events">Events</a></li>
-            <li ng-show="!me.email"><a href="/auth/google">Login</a></li>
+            
+          </ul>
+
+          <ul class="nav navbar-nav navbar-right">
+            <li ng-show="!me.email">
+              <div style="padding-top: 10px; padding-right: 15px"> 
+                <google-plus-signin data-scope="email profile" clientid="552885779455-vap433nf52071m1onc6bknnilvl77vgd.apps.googleusercontent.com"> </google-plus-signin>
+
+              </div>
+            </li>
             <li ng-show="me.email"><a href="/logout">Logout</a></li>
           </ul>
         </div>
@@ -73,9 +82,18 @@
     <script src="/components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
     <script src="/components/ng-file-upload/angular-file-upload-shim.js"></script> 
     <script src="/components/ng-file-upload/angular-file-upload.js"></script> 
-    <script type="text/javascript" src="/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/components/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min.js"></script>
+    <script src="/components/angular-directive.g-signin/google-plus-signin.js"> </script>
 
 
     <script src="/js/app.js"> </script>
+
+    <script type="text/javascript">
+      (function() {
+        var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+        po.src = 'https://apis.google.com/js/client:plusone.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+      })();
+    </script>
   </body>
 </html>

@@ -4,7 +4,7 @@
  */
 
 var passport = require('passport');
-var GoogleStrategy = require('passport-google').Strategy;
+var GooglePlusStrategy = require('passport-google-plus');
 var secrets = require('../secrets')
 var mongoose = require("mongoose")
 var User = require("../models/user")
@@ -30,10 +30,9 @@ function init(app) {
     res.redirect('http://' + secrets.hostname + ':' + secrets.port);
   });
 
-  app.get('/auth/google/return', passport.authenticate('google', { 
-    successRedirect: 'http://' + secrets.hostname + ':' + secrets.port + '/#/profile',
-    failureRedirect: 'http://' + secrets.hostname + ':' + secrets.port + '/' 
-  }));
+  app.post('/auth/google/return', passport.authenticate('google'), function(req, res) {
+    res.redirect('/#/profile') 
+  });
 
   passport.serializeUser(function(user, done) {
     done(null, user.id);
@@ -43,19 +42,18 @@ function init(app) {
     User.findById(id,done);
   });
 
-  passport.use(new GoogleStrategy({
-      returnURL: 'http://' + secrets.hostname + ':' + secrets.port + '/auth/google/return',
-      realm: 'http://' + secrets.hostname + ':' + secrets.port
-    },
-    function(identifier, profile, done) {
-
-      User.findOne({ email: profile.emails[0].value }, function(err, user) {
+  passport.use(new GooglePlusStrategy({
+    clientId: secrets.GOOGLE_PLUS_CLIENT_ID,
+    clientSecret: secrets.GOOGLE_PLUS_CLIENT_SECRET
+  }, function(token, profile, done) {
+   // console.log(token, profile)
+      User.findOne({ email: profile.email}, function(err, user) {
         if(user) {
           user.lastLogin = new Date()
           return user.save(done)
         } else {
           var user = new User({
-            email: profile.emails[0].value,
+            email: profile.email,
             name: profile.displayName,
             firstLogin: new Date()
           });

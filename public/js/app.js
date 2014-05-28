@@ -1,4 +1,4 @@
-var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload'])
+var app = angular.module('app', ['ngResource', 'ngRoute', 'ui.bootstrap', 'angularFileUpload', 'directive.g+signin'])
 
 app.config(function($routeProvider) {
   $routeProvider
@@ -64,6 +64,20 @@ app.controller('HeaderController', function(Me, $scope, $location) {
   $scope.isActive = function (viewLocation) { 
         return viewLocation === $location.path();
   };
+
+  $scope.$on('event:google-plus-signin-success', function (event,authResult) {
+    if (authResult.code) {
+      $.post('/auth/google/return', { code: authResult.code})
+      .done(function(data) {
+        $('#signinButton').hide();
+        $scope.me = Me.get(function() {
+          $location.url('/profile')
+        })
+      }); 
+    } else if (authResult.error) {
+      console.log('There was an error: ' + authResult.error);
+    }
+  });
 })
 
 app.controller('HomeController', function(Me, $scope) {

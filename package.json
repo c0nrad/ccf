@@ -18,7 +18,7 @@
     "rand-token": "*",
     "multer": "*",
     "passport": "*",
-    "passport-google": "*",
+    "passport-google-plus": "*",
     "express-session": "*"
   }
 }
